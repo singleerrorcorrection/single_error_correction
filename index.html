@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            margin: 10px;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <title>Code Generation Table</title>
+    
+</head>
+<body>
+<h6>SINGLE ERROR CORRECTION</h6>
+<script>
+    let inputData = prompt("Enter data_bit1: ");
+    var dataLength = inputData.length;
+    var redundancyBits = calculateRedundancyBits(dataLength);
+    var totalBits = dataLength + redundancyBits;
+    let binaryIndices = [];
+    var checkBitPositions = [];
+    let dataBitPositions = [];
+    let binaryIndicesInDecimal = [];
+    let parityBits = [];
+    let codeword = [];
+    var dataBitWithPrefix = [];
+    var dataBitWithHyphen = [];
+    var wordD = 'D';
+    var wordHyphen = '-';
+    var wordC = 'C';
+
+    function calculateRedundancyBits(length) {
+        var r = 0;
+        while (Math.pow(2, r) - 1 < length + r) {
+            r++;
+        }
+        return r;
+    }
+
+    for (let i = 0; i < dataLength; i++) {
+        dataBitWithPrefix[i] = wordD + (i + 1);
+    }
+
+    var dataBitsArray = inputData.split("").map(Number).reverse();
+    for (let i = 0; i < totalBits; i++) {
+        binaryIndices[i] = i + 1;
+    }
+
+    for (let i = 0; i < totalBits; i++) {
+        binaryIndicesInDecimal[i] = binaryIndices[i].toString(2).padStart(redundancyBits, '0');
+    }
+
+    for (let i = 0; i < redundancyBits; i++) {
+        checkBitPositions[i] = Math.pow(2, i);
+    }
+
+    const dataBitsWithoutCheckBits = binaryIndices
+        .filter((value) => !checkBitPositions.includes(value))
+        .map((decimalNumber) => decimalNumber.toString(2).padStart(redundancyBits, '0'));
+
+    for (let i = 0; i < redundancyBits; i++) {
+        parityBits[i] = 0;
+        for (let j = 0; j < dataLength; j++) {
+            if (dataBitsWithoutCheckBits[j].charAt(redundancyBits - i - 1) === '1') {
+                parityBits[i] ^= dataBitsArray[j];
+            }
+        }
+    }
+
+    for (let i = 0; i < dataLength; i++) {
+        dataBitPositions[i] = parseInt(dataBitsWithoutCheckBits[i], 2);
+    }
+
+    let parityIndex = 0;
+    for (let i = 0; i < totalBits; i++) {
+        var insertIndex = Math.pow(2, parityIndex) - 1;
+        if (i === insertIndex) {
+            codeword.push(parityBits[parityIndex]);
+            parityIndex++;
+        } else {
+            codeword.push(dataBitsArray.shift());
+        }
+    }
+    codeword = codeword.join("");
+
+    for (let i = 0; i < redundancyBits; i++) {
+        var insertIndex = Math.pow(2, i) - 1;
+        dataBitWithPrefix.splice(insertIndex, 0, wordHyphen);
+    }
+
+    var dataBitWithC = dataBitWithHyphen;
+
+    let parityIndex1 = 0;
+    for (let i = 0; i < totalBits; i++) {
+        var insertIndex = Math.pow(2, parityIndex1) - 1;
+        if (i === insertIndex) {
+            dataBitWithC[i] = wordC + checkBitPositions[parityIndex1];
+            parityIndex1++;
+        } else {
+            dataBitWithC[i] = wordHyphen;
+        }
+    }
+
+let inputData2 = prompt("Enter data_bit2: ");
+var dataLength2 = inputData2.length;
+var redundancyBits2 = calculateRedundancyBits(dataLength2);
+var totalBits2 = dataLength2 + redundancyBits2;
+let binaryIndices2 = [];
+var checkBitPositions2 = [];
+let dataBitPositions2 = [];
+let binaryIndicesInDecimal2 = [];
+let parityBits2 = [];
+let codeword2 = [];
+var dataBitWithPrefix2 = [];
+var dataBitWithHyphen2 = [];
+var wordD2 = 'D';
+var wordHyphen2 = '-';
+var wordC2 = 'C';
+
+function calculateRedundancyBits(length) {
+    var r = 0;
+    while (Math.pow(2, r) - 1 < length + r) {
+        r++;
+    }
+    return r;
+}
+
+for (let i = 0; i < dataLength2; i++) {
+    dataBitWithPrefix2[i] = wordD2 + (i + 1);
+}
+
+var dataBitsArray2 = inputData2.split("").map(Number).reverse();
+for (let i = 0; i < totalBits2; i++) {
+    binaryIndices2[i] = i + 1;
+}
+
+for (let i = 0; i < totalBits2; i++) {
+    binaryIndicesInDecimal2[i] = binaryIndices2[i].toString(2).padStart(redundancyBits2, '0');
+}
+
+for (let i = 0; i < redundancyBits2; i++) {
+    checkBitPositions2[i] = Math.pow(2, i);
+}
+
+const dataBitsWithoutCheckBits2 = binaryIndices2
+    .filter((value) => !checkBitPositions2.includes(value))
+    .map((decimalNumber) => decimalNumber.toString(2).padStart(redundancyBits2, '0'));
+
+for (let i = 0; i < redundancyBits2; i++) {
+    parityBits2[i] = 0;
+    for (let j = 0; j < dataLength2; j++) {
+        if (dataBitsWithoutCheckBits2[j].charAt(redundancyBits2 - i - 1) === '1') {
+            parityBits2[i] ^= dataBitsArray2[j];
+        }
+    }
+}
+
+for (let i = 0; i < dataLength2; i++) {
+    dataBitPositions2[i] = parseInt(dataBitsWithoutCheckBits2[i], 2);
+}
+
+let parityIndex2 = 0;
+for (let i = 0; i < totalBits2; i++) {
+    var insertIndex2 = Math.pow(2, parityIndex2) - 1;
+    if (i === insertIndex2) {
+        codeword2.push(parityBits2[parityIndex2]);
+        parityIndex2++;
+    } else {
+        codeword2.push(dataBitsArray2.shift());
+    }
+}
+codeword2 = codeword2.join("");
+
+for (let i = 0; i < redundancyBits2; i++) {
+    var insertIndex2 = Math.pow(2, i) - 1;
+    dataBitWithPrefix2.splice(insertIndex2, 0, wordHyphen2);
+}
+
+var dataBitWithC2 = dataBitWithHyphen2;
+
+let parityIndex22 = 0;
+for (let i = 0; i < totalBits2; i++) {
+    var insertIndex2 = Math.pow(2, parityIndex22) - 1;
+    if (i === insertIndex2) {
+        dataBitWithC2[i] = wordC2 + checkBitPositions2[parityIndex22];
+        parityIndex22++;
+    } else {
+        dataBitWithC2[i] = wordHyphen2;
+    }
+}
+
+var xorResult = xorParityBits(parityBits, parityBits2);
+var xorResult1 = xorParityBits1(parityBits, parityBits2);
+
+function xorParityBits(parityBits, parityBits2) {
+  let resultBinary = '';
+  for (let i = 0; i < parityBits.length; i++) {
+    resultBinary += (parseInt(parityBits2[i]) ^ parseInt(parityBits[i])).toString();
+  }
+  resultBinary = resultBinary.split('').reverse().join('');
+
+  // Convert binary result to decimal
+  let resultDecimal = parseInt(resultBinary, 2);
+  
+  return resultDecimal;
+}
+function xorParityBits1(parityBits, parityBits2) {
+  let resultBinary = '';
+  for (let i = 0; i < parityBits.length; i++) {
+    resultBinary += (parseInt(parityBits2[i]) ^ parseInt(parityBits[i])).toString();
+  }
+  resultBinary = resultBinary.split('').reverse().join('');
+
+  return resultBinary;
+}
+
+    // Create HTML table
+    var tableHtml = '<table>';
+    tableHtml += '<tr><th>Bit Position</th><th>Number Position</th><th>Check Bit</th><th>Data Bit</th><th>Store Word</th><th>Fetch Word</th></tr>';
+    for (let i = 0; i < totalBits; i++) {
+        tableHtml += `<tr><td>${binaryIndicesInDecimal[i]}</td><td>${binaryIndices[i]}</td><td>${dataBitWithC[i]}</td><td>${dataBitWithPrefix[i]}</td><td>${codeword[i]}</td>><td>${codeword2[i]}</td></tr>`;
+    }
+    tableHtml += '</table>';
+    document.body.innerHTML += tableHtml;
+
+    var tableHtml1 = '<table>';
+tableHtml1 += '<tr><th>Error Number Position</th><th>Error Bit Position</th></tr>';
+tableHtml1 += `<tr><td>${xorResult}</td><td>${xorResult1}</td></tr>`;
+tableHtml1 += '</table>';
+document.body.innerHTML += tableHtml1;
+</script>
+
+</body>
+</html>
